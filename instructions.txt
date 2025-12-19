@@ -1,0 +1,198 @@
+Project Context
+
+This folder contains data for the CredResolve – Next Best Action Intelligence Challenge.
+
+The goal is to train a machine learning model that predicts the probability (TARGET) that a given suggested action will successfully recover payment from a borrower.
+
+The final output must be a submission file with:
+
+exactly 20000 rows
+
+columns: id, TARGET
+
+TARGET values between 0 and 1
+
+Dataset Files Present
+
+Core:
+
+train.csv
+
+test.csv
+
+metaData.csv
+
+sample_submission.csv
+
+Interaction Logs:
+
+whatsapp_activity.csv
+
+teleco_call_back.csv (AI Voice Bot calls)
+
+call_placed.csv (Human calls)
+
+mobile_app_data.csv (Field visits)
+
+AI_sms_callback.csv (SMS delivery logs)
+
+All files must be joined using lead_code.
+
+What You Must Build
+1. Customer 360 Feature Table
+
+Create one aggregated row per lead_code using all interaction logs.
+
+WhatsApp (whatsapp_activity.csv)
+
+Generate features:
+
+count of messages sent
+
+count delivered, read, failed
+
+read rate
+
+whether user ever responded
+
+days since last read
+
+AI Voice Bot (teleco_call_back.csv)
+
+Generate:
+
+total bot calls
+
+answered count and answer rate
+
+average and max call duration
+
+days since last bot call
+
+extract intent and sentiment from transcript_json
+
+count of PTP intent
+
+count of positive sentiment
+
+Human Calls (call_placed.csv)
+
+Generate:
+
+total human calls
+
+answered count and answer rate
+
+average call duration
+
+days since last human call
+
+number of unique agents involved
+
+Field Visits (mobile_app_data.csv)
+
+Generate:
+
+total visits
+
+counts of results:
+
+MET_CUSTOMER
+
+DOOR_LOCKED
+
+SHIFTED
+
+days since last visit
+
+SMS (AI_sms_callback.csv)
+
+Generate:
+
+total SMS count
+
+delivered count
+
+delivery rate
+
+2. Static Borrower Features (metaData.csv)
+
+Include:
+
+total_due
+
+log-transformed total_due
+
+dpd_bucket
+
+state
+
+3. Training Dataset Construction
+
+Merge Customer 360 features into train.csv and test.csv
+
+Include suggested_action as a model feature
+
+Handle missing values safely
+
+Encode categorical variables properly
+
+4. Model Training
+
+Train a single probability prediction model
+
+Use LightGBM or CatBoost
+
+Use GroupKFold cross-validation with lead_code as group
+
+Objective: predict probability of success (TARGET)
+
+Ensure predictions are between 0 and 1
+
+5. Prediction & Submission
+
+Predict TARGET for all rows in test.csv
+
+Create a submission file with:
+
+id
+
+TARGET
+
+Ensure exactly 20000 rows
+
+Save as submission.csv
+
+Output Expectations
+
+Code should be clean, readable, and runnable in Jupyter Notebook
+
+Each step should be in separate logical blocks:
+
+data loading
+
+feature aggregation
+
+merging
+
+training
+
+prediction
+
+Avoid data leakage
+
+Do NOT manually select or optimize actions
+
+Only predict success probability for given suggested_action
+
+Important Notes
+
+You may assume all CSVs are in the same directory
+
+Focus on correctness over heavy optimization
+
+This is a learning-oriented, baseline-quality solution
+
+Final Goal
+
+Generate a working ML pipeline that produces a valid Kaggle submission file for this competition.
